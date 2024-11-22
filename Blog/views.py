@@ -1,12 +1,40 @@
 from  rest_framework.response import Response
 from rest_framework.decorators import api_view
 from Blog.models import  blog
-from .serializers import blogserializer,UserSerializer
+from rest_framework.views import APIView
+from .serializers import blogserializer,UserSerializer,RegisterSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+
+
+class RegistrationView(APIView):
+    def post(self,request):
+        try:
+            data=request.data
+            serializer=RegisterSerializer(data=data)
+            if not serializer.is_valid():
+                return Response({
+                    'data':serializer.errors,
+                    'message':'somthing went wrong'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response({
+                'data':{},
+                'message':'your account is created'
+                }, status=status.HTTP_201_CREATED
+             )
+
+        except Exception as e:
+            return Response({
+                    'data':serializer.errors,
+                    'message':'somthing went wrong'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 def example_view(request):
     data = {
