@@ -7,11 +7,21 @@ from .models import Blog,Tag
 from .serializers import BlogSerializer,RegisterSerializer,LoginSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.db.models import Q
+
+
 class BlogListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        search_query = request.query_params.get('search', None)
         blogs = Blog.objects.filter(user=request.user)
+        if search_query:
+            blogs = blogs.filter(
+                Q(title__icontains=search_query) | 
+                Q(content__icontains=search_query) | 
+                Q(tags__name__icontains=search_query)
+            ).distinct()
         serializer = BlogSerializer(blogs, many=True)
         return Response({'data': serializer.data, 'message': 'Blogs fetched successfully'}, status=status.HTTP_200_OK)
 
