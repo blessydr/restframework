@@ -1,17 +1,15 @@
 from django.urls import path
 from django.urls import re_path
 from . import views
-from .views import RegistrationView
+from .views import RegistrationView,BlogListCreateView,LoginView
 
 
 
 urlpatterns = [
-    path('',views.getData),
-    path('add/',views.add_blog),
-    path ('hi',views.example_view),
-    re_path('login',views.login),
-    re_path('signup',views.signup),
-    re_path('test',views.test_token),
-    path("register/",RegistrationView.as_view())
+
+    path('login/', LoginView.as_view(), name='login'),
+
+    path("register/",RegistrationView.as_view()),
+    path('blogs/', BlogListCreateView.as_view(), name='blog-list-create'),
 
 ]
