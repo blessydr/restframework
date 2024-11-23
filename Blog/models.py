@@ -17,6 +17,11 @@ class Blog(models.Model):
     tags = models.ManyToManyField(Tag, related_name="blogs", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Approved')
     def __str__(self):
         return self.title

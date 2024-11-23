@@ -8,13 +8,12 @@ class BlogSerializer(serializers.ModelSerializer):
         model = Blog
         fields = ['id', 'title', 'content', 'user', 'tags','created_at', 'updated_at']
         def create(self, validated_data):
-            tags_data = validated_data.pop('tags')  # Extract tags data
-            blog = Blog.objects.create(**validated_data)  # Create the Blog object
+            tags_data = validated_data.pop('tags') 
+            blog = Blog.objects.create(**validated_data)  
 
-            # Loop through each tag data
             for tag_data in tags_data:
-                tag, created = Tag.objects.get_or_create(name=tag_data['name'])  # Get or create the tag
-                blog.tags.add(tag)  # Add tag to blog's tags
+                tag, created = Tag.objects.get_or_create(name=tag_data['name']) 
+                blog.tags.add(tag) 
 
             return blog
             
